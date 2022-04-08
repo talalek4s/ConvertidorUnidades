@@ -1,6 +1,8 @@
 package mx.unam.convertidorunidades;
 
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
@@ -24,6 +26,11 @@ public class ConvertidorUi extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
+        //cambio manual de las unidades
+        etiqueta1.set("centimetros(cm)");
+        etiqueta2.set("pulgadas(in)");
+
+        //controles
         Label labelUnidad1 = new Label(etiqueta1.getValue());
         Label labelUnidad2 = new Label(etiqueta2.getValue());
 
@@ -35,15 +42,19 @@ public class ConvertidorUi extends Application {
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
 
+        //calculos
+
+        //Hbox 1
         HBox hBoxBloque1 = new HBox(2, textFieldUnidadUno, labelUnidad1);
         HBox hBoxBloque2 = new HBox(2, textFieldUnidadDos, labelUnidad2);
         HBox.setMargin(textFieldUnidadUno, new Insets(30, 0, 20, 10));
         HBox.setMargin(labelUnidad1, new Insets(30, 0, 20, 10));
-        HBox.setMargin(textFieldUnidadDos, new Insets(30, 0, 10, 10));
-        HBox.setMargin(labelUnidad2, new Insets(30, 0, 10, 10));
+        HBox.setMargin(textFieldUnidadDos, new Insets(20, 0, 10, 10));
+        HBox.setMargin(labelUnidad2, new Insets(20, 0, 10, 10));
 
+        //Vbox 1
         VBox vBoxGrupo = new VBox(hBoxBloque1, slider, hBoxBloque2);
-        VBox.setMargin(slider, new Insets(0, 0, 0, 10));
+        VBox.setMargin(slider, new Insets(0, 10, 0, 10));
 
         Pane pane = new Pane(vBoxGrupo);
 
@@ -54,6 +65,7 @@ public class ConvertidorUi extends Application {
     }
 
     public static void main(String[] args) {
+
         launch();
     }
 }
