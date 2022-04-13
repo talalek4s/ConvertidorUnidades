@@ -1,6 +1,7 @@
 package mx.unam.convertidorunidades;
 
 import javafx.application.Application;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,6 +24,10 @@ public class ConvertidorUi extends Application {
 
     StringProperty etiqueta1 = new SimpleStringProperty("Unidad1");
     StringProperty etiqueta2 = new SimpleStringProperty("Unidad2");
+    DoubleProperty valorSlider = new SimpleDoubleProperty(0.0);
+    DoubleProperty cm = new SimpleDoubleProperty(null, "cm", 0.0);
+    DoubleProperty in = new SimpleDoubleProperty(null, "in", 0.0);
+    DoubleProperty medicionSlider = new SimpleDoubleProperty(0.0);
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -44,6 +50,18 @@ public class ConvertidorUi extends Application {
 
         //calculos
 
+
+        //valorSlider.bind(slider.valueProperty());
+        medicionSlider.bind(slider.valueProperty());
+        cm.bind(medicionSlider);
+
+        in.bind(slider.valueProperty());
+
+        textFieldUnidadUno.textProperty().bind(cm.asString());
+      // How to bind medicionSlider with inches
+      //  textFieldUnidadDos.textProperty().bind(medicionSlider.asString());
+
+
         //Hbox 1
         HBox hBoxBloque1 = new HBox(2, textFieldUnidadUno, labelUnidad1);
         HBox hBoxBloque2 = new HBox(2, textFieldUnidadDos, labelUnidad2);
@@ -51,6 +69,8 @@ public class ConvertidorUi extends Application {
         HBox.setMargin(labelUnidad1, new Insets(30, 0, 20, 10));
         HBox.setMargin(textFieldUnidadDos, new Insets(20, 0, 10, 10));
         HBox.setMargin(labelUnidad2, new Insets(20, 0, 10, 10));
+
+        //Hbox2
 
         //Vbox 1
         VBox vBoxGrupo = new VBox(hBoxBloque1, slider, hBoxBloque2);
@@ -63,6 +83,7 @@ public class ConvertidorUi extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
 
     public static void main(String[] args) {
 
