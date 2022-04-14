@@ -9,6 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -25,11 +26,9 @@ public class ConvertidorUi extends Application {
 
     StringProperty etiqueta1 = new SimpleStringProperty("Unidad1");
     StringProperty etiqueta2 = new SimpleStringProperty("Unidad2");
-    DoubleProperty valorSlider = new SimpleDoubleProperty(0.0);
     DoubleProperty cm = new SimpleDoubleProperty(null, "cm", 0.0);
     DoubleProperty in = new SimpleDoubleProperty(0.0);
     DoubleProperty medicionSlider = new SimpleDoubleProperty(0.0);
-    //DoubleBinding pulgadas = c
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -38,12 +37,16 @@ public class ConvertidorUi extends Application {
         etiqueta1.set("centimetros(cm)");
         etiqueta2.set("pulgadas(in)");
 
-        //controles
+        //etiquetas para unidades
         Label labelUnidad1 = new Label(etiqueta1.getValue());
         Label labelUnidad2 = new Label(etiqueta2.getValue());
 
         TextField textFieldUnidadUno = new TextField();
         TextField textFieldUnidadDos = new TextField();
+
+        //etiquetas para unidades
+        Label labelMenuDimensiones = new Label("Dimensiones");
+        Label labelUnidades = new Label("Unidades");
 
         Slider slider = new Slider(0, 100, 0);
         slider.setMajorTickUnit(10.0);
@@ -61,6 +64,11 @@ public class ConvertidorUi extends Application {
         textFieldUnidadUno.textProperty().bind(cm.asString());
         textFieldUnidadDos.textProperty().bind(in.asString());
 
+        //control textFields
+       /* textFieldUnidadUno.setOnMouseClicked(mouseEvent -> {
+
+        });*/
+
 
         //Hbox 1
         HBox hBoxBloque1 = new HBox(2, textFieldUnidadUno, labelUnidad1);
@@ -70,15 +78,16 @@ public class ConvertidorUi extends Application {
         HBox.setMargin(textFieldUnidadDos, new Insets(20, 0, 10, 10));
         HBox.setMargin(labelUnidad2, new Insets(20, 0, 10, 10));
 
-        //Hbox2
-
         //Vbox 1
         VBox vBoxGrupo = new VBox(hBoxBloque1, slider, hBoxBloque2);
         VBox.setMargin(slider, new Insets(0, 10, 0, 10));
 
+        //Hbox2
+        // aqui van las etiquetas de unidades
+
         Pane pane = new Pane(vBoxGrupo);
 
-        Scene scene = new Scene(pane, 400, 180);
+        Scene scene = new Scene(pane, 600, 180);
         stage.setTitle("Convertidor de unidades");
         stage.setScene(scene);
         stage.show();
