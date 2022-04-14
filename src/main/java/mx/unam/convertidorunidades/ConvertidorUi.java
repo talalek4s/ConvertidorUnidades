@@ -1,6 +1,7 @@
 package mx.unam.convertidorunidades;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -26,8 +27,9 @@ public class ConvertidorUi extends Application {
     StringProperty etiqueta2 = new SimpleStringProperty("Unidad2");
     DoubleProperty valorSlider = new SimpleDoubleProperty(0.0);
     DoubleProperty cm = new SimpleDoubleProperty(null, "cm", 0.0);
-    DoubleProperty in = new SimpleDoubleProperty(null, "in", 0.0);
+    DoubleProperty in = new SimpleDoubleProperty(0.0);
     DoubleProperty medicionSlider = new SimpleDoubleProperty(0.0);
+    //DoubleBinding pulgadas = c
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -45,21 +47,19 @@ public class ConvertidorUi extends Application {
 
         Slider slider = new Slider(0, 100, 0);
         slider.setMajorTickUnit(10.0);
+        slider.setBlockIncrement(1.0);
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
 
         //calculos
 
-
-        //valorSlider.bind(slider.valueProperty());
         medicionSlider.bind(slider.valueProperty());
         cm.bind(medicionSlider);
+        in.bind(medicionSlider.divide(2.54));
 
-        in.bind(slider.valueProperty());
-
+        //Link mediciones y contenedor
         textFieldUnidadUno.textProperty().bind(cm.asString());
-      // How to bind medicionSlider with inches
-      //  textFieldUnidadDos.textProperty().bind(medicionSlider.asString());
+        textFieldUnidadDos.textProperty().bind(in.asString());
 
 
         //Hbox 1
