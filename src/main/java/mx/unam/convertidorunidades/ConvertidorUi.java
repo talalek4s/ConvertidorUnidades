@@ -29,6 +29,8 @@ public class ConvertidorUi extends Application {
     DoubleProperty m = new SimpleDoubleProperty(0.0);
     DoubleProperty mi = new SimpleDoubleProperty(0.0);
     DoubleProperty ft = new SimpleDoubleProperty(0.0);
+    DoubleProperty kg = new SimpleDoubleProperty(0.0);
+    DoubleProperty lb = new SimpleDoubleProperty(0.0);
     DoubleProperty medicionSlider = new SimpleDoubleProperty(0.0);
 
     @Override
@@ -37,6 +39,8 @@ public class ConvertidorUi extends Application {
 //        //cambio manual de las unidades
 //        etiqueta1.set("centimetros(cm)");
 //        etiqueta2.set("pulgadas(in)");
+
+        SplitPane splitPane = new SplitPane();
 
         //etiquetas para unidades
         Label labelUnidad1 = new Label(etiqueta1.getValue());
@@ -91,7 +95,7 @@ public class ConvertidorUi extends Application {
 //        textFieldUnidadDos.textProperty().bind(in.asString());
 
 
-        SplitPane splitPane = new SplitPane();
+
 
         //Hbox 1
         HBox hBoxBloque1 = new HBox(2, textFieldUnidadUno, labelUnidad1);
@@ -142,7 +146,7 @@ public class ConvertidorUi extends Application {
             vBoxUnidades.getChildren().addAll(radioButtoncm3L, radioButtonLGa);
         });
 
-        //seleccion de la conversion
+        //CALCULOS DE  SELECCION DE CONVERSION
 
         radioButtonCmIn.setOnAction(actionEvent -> {
 
@@ -185,6 +189,20 @@ public class ConvertidorUi extends Application {
 
             textFieldUnidadUno.textProperty().bind(m.asString());
             textFieldUnidadDos.textProperty().bind(ft.asString());
+
+        });
+
+        radioButtonLbKg.setOnAction(actionEvent -> {
+           etiqueta1.set("Kilogramos (Kg)");
+           etiqueta2.set("Libras (Lb)");
+           labelUnidad1.textProperty().bind(etiqueta1);
+           labelUnidad2.textProperty().bind(etiqueta2);
+
+           kg.bind(medicionSlider);
+           lb.bind(medicionSlider.multiply(2.2046));
+
+           textFieldUnidadUno.textProperty().bind(kg.asString());
+           textFieldUnidadDos.textProperty().bind(lb.asString());
 
         });
 
