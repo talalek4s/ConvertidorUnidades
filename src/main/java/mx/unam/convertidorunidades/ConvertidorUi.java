@@ -24,16 +24,19 @@ public class ConvertidorUi extends Application {
 
     StringProperty etiqueta1 = new SimpleStringProperty("Unidad1");
     StringProperty etiqueta2 = new SimpleStringProperty("Unidad2");
-    DoubleProperty cm = new SimpleDoubleProperty(null, "cm", 0.0);
+    DoubleProperty cm = new SimpleDoubleProperty(0.0);
     DoubleProperty in = new SimpleDoubleProperty(0.0);
+    DoubleProperty m = new SimpleDoubleProperty(0.0);
+    DoubleProperty mi = new SimpleDoubleProperty(0.0);
+    DoubleProperty ft = new SimpleDoubleProperty(0.0);
     DoubleProperty medicionSlider = new SimpleDoubleProperty(0.0);
 
     @Override
     public void start(Stage stage) throws IOException {
 
-        //cambio manual de las unidades
-        etiqueta1.set("centimetros(cm)");
-        etiqueta2.set("pulgadas(in)");
+//        //cambio manual de las unidades
+//        etiqueta1.set("centimetros(cm)");
+//        etiqueta2.set("pulgadas(in)");
 
         //etiquetas para unidades
         Label labelUnidad1 = new Label(etiqueta1.getValue());
@@ -64,21 +67,28 @@ public class ConvertidorUi extends Application {
         //radiobutton para seleccionar conversion
             //longitud
                 RadioButton radioButtonCmIn = new RadioButton("cm - in");
-                RadioButton radioButtonCmFt = new RadioButton("cm - ft");
+                RadioButton radioButtonmFt = new RadioButton("m - ft");
                 RadioButton radioButtonMMi = new RadioButton("m - millas");
                 ToggleGroup radioGroupLongitud = new ToggleGroup();
+             //volumen
+                RadioButton radioButtoncm3L = new RadioButton("lt - cm3");
+                RadioButton radioButtonLGa = new RadioButton("lt- Galones");
+                ToggleGroup radioGroupVolumen = new ToggleGroup();
+             //masa
+                RadioButton radioButtonLbKg = new RadioButton("Kg - Lb");
+                ToggleGroup radioGroupMasa = new ToggleGroup();
 
 
 
         //calculos
 
         medicionSlider.bind(slider.valueProperty());
-        cm.bind(medicionSlider);
-        in.bind(medicionSlider.divide(2.54));
-
-        //Link mediciones y contenedor
-        textFieldUnidadUno.textProperty().bind(cm.asString());
-        textFieldUnidadDos.textProperty().bind(in.asString());
+//        cm.bind(medicionSlider);
+//        in.bind(medicionSlider.divide(2.54));
+//
+//        //Link mediciones y contenedor
+//        textFieldUnidadUno.textProperty().bind(cm.asString());
+//        textFieldUnidadDos.textProperty().bind(in.asString());
 
 
         SplitPane splitPane = new SplitPane();
@@ -108,11 +118,10 @@ public class ConvertidorUi extends Application {
         //Vbox3 Unidades
         VBox vBoxUnidades = new VBox(labelUnidades);
             //toggle radiobutton
-                radioButtonCmFt.setToggleGroup(radioGroupLongitud);
+                radioButtonmFt.setToggleGroup(radioGroupLongitud);
                 radioButtonCmIn.setToggleGroup(radioGroupLongitud);
                 radioButtonMMi.setToggleGroup(radioGroupLongitud);
 
-        //vBoxUnidades.getChildren().addAll(radioButtonCmFt, radioButtonCmIn, radioButtonMMi);
 
         //La diivsionn de los tres contenedors
         splitPane.getItems().addAll(vBoxGrupo, vBoxMenuUnidades, vBoxUnidades);
@@ -121,7 +130,62 @@ public class ConvertidorUi extends Application {
         // Selleccion de tooglebutton
 
         toggleButtonLongitud.setOnAction(actionEvent -> {
-            vBoxUnidades.getChildren().addAll(radioButtonCmFt, radioButtonCmIn, radioButtonMMi);
+            vBoxUnidades.getChildren().clear();
+            vBoxUnidades.getChildren().addAll(radioButtonmFt, radioButtonCmIn, radioButtonMMi);
+        });
+        toggleButtonMasa.setOnAction(actionEvent -> {
+            vBoxUnidades.getChildren().clear();
+            vBoxUnidades.getChildren().addAll(radioButtonLbKg);
+        });
+        toggleButtonVolumen.setOnAction(actionEvent -> {
+            vBoxUnidades.getChildren().clear();
+            vBoxUnidades.getChildren().addAll(radioButtoncm3L, radioButtonLGa);
+        });
+
+        //seleccion de la conversion
+
+        radioButtonCmIn.setOnAction(actionEvent -> {
+
+            //cambio manual de las unidades
+            etiqueta1.set("centimetros(cm)");
+            etiqueta2.set("pulgadas(in)");
+            labelUnidad1.textProperty().bind(etiqueta1);
+            labelUnidad2.textProperty().bind(etiqueta2);
+
+            cm.bind(medicionSlider);
+            in.bind(medicionSlider.divide(2.54));
+
+            //Link mediciones y contenedor
+            textFieldUnidadUno.textProperty().bind(cm.asString());
+            textFieldUnidadDos.textProperty().bind(in.asString());
+
+        });
+
+        radioButtonMMi.setOnAction(actionEvent -> {
+            etiqueta1.set("metros (m)");
+            etiqueta2.set("millas (mi)");
+            labelUnidad1.textProperty().bind(etiqueta1);
+            labelUnidad2.textProperty().bind(etiqueta2);
+
+            m.bind(medicionSlider);
+            mi.bind(medicionSlider.multiply(0.00062137));
+
+            textFieldUnidadUno.textProperty().bind(m.asString());
+            textFieldUnidadDos.textProperty().bind(mi.asString());
+        });
+
+        radioButtonmFt.setOnAction(actionEvent -> {
+            etiqueta1.set("metros (m)");
+            etiqueta2.set("pies (ft)");
+            labelUnidad1.textProperty().bind(etiqueta1);
+            labelUnidad2.textProperty().bind(etiqueta2);
+
+            m.bind(medicionSlider);
+            ft.bind(medicionSlider.multiply(3.28));
+
+            textFieldUnidadUno.textProperty().bind(m.asString());
+            textFieldUnidadDos.textProperty().bind(ft.asString());
+
         });
 
         //Pane pane = new Pane(vBoxGrupo);
