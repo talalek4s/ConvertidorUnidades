@@ -11,9 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -44,15 +42,33 @@ public class ConvertidorUi extends Application {
         TextField textFieldUnidadUno = new TextField();
         TextField textFieldUnidadDos = new TextField();
 
-        //etiquetas para unidades
+        //etiquetas para unidades en split1
         Label labelMenuDimensiones = new Label("Dimensiones");
         Label labelUnidades = new Label("Unidades");
+        //etiquetas para selector de unidades en split2
+
 
         Slider slider = new Slider(0, 100, 0);
         slider.setMajorTickUnit(10.0);
         slider.setBlockIncrement(1.0);
         slider.setShowTickMarks(true);
         slider.setShowTickLabels(true);
+
+        //ToggleButtons para las unidades
+        ToggleButton toggleButtonLongitud = new ToggleButton("Longitud");
+        ToggleButton toggleButtonMasa = new ToggleButton("Masa");
+        ToggleButton toggleButtonVolumen = new ToggleButton("Volumen");
+
+        ToggleGroup toggleGroupUnidades = new ToggleGroup();
+
+        //radiobutton para seleccionar conversion
+            //longitud
+                RadioButton radioButtonCmIn = new RadioButton("cm - in");
+                RadioButton radioButtonCmFt = new RadioButton("cm - ft");
+                RadioButton radioButtonMMi = new RadioButton("m - millas");
+                ToggleGroup radioGroupLongitud = new ToggleGroup();
+
+
 
         //calculos
 
@@ -64,11 +80,8 @@ public class ConvertidorUi extends Application {
         textFieldUnidadUno.textProperty().bind(cm.asString());
         textFieldUnidadDos.textProperty().bind(in.asString());
 
-        //control textFields
-       /* textFieldUnidadUno.setOnMouseClicked(mouseEvent -> {
 
-        });*/
-
+        SplitPane splitPane = new SplitPane();
 
         //Hbox 1
         HBox hBoxBloque1 = new HBox(2, textFieldUnidadUno, labelUnidad1);
@@ -82,12 +95,38 @@ public class ConvertidorUi extends Application {
         VBox vBoxGrupo = new VBox(hBoxBloque1, slider, hBoxBloque2);
         VBox.setMargin(slider, new Insets(0, 10, 0, 10));
 
-        //Hbox2
-        // aqui van las etiquetas de unidades
+        //Vbox2 MenuUnidades
+        VBox vBoxMenuUnidades = new VBox(labelMenuDimensiones);
+        //ToggleGroup
+        toggleButtonLongitud.setToggleGroup(toggleGroupUnidades);
+        toggleButtonMasa.setToggleGroup(toggleGroupUnidades);
+        toggleButtonVolumen.setToggleGroup(toggleGroupUnidades);
+        //Agrupar los togglebuttons en vbox
+        vBoxMenuUnidades.getChildren().addAll(toggleButtonLongitud, toggleButtonMasa,
+                toggleButtonVolumen);
 
-        Pane pane = new Pane(vBoxGrupo);
+        //Vbox3 Unidades
+        VBox vBoxUnidades = new VBox(labelUnidades);
+            //toggle radiobutton
+                radioButtonCmFt.setToggleGroup(radioGroupLongitud);
+                radioButtonCmIn.setToggleGroup(radioGroupLongitud);
+                radioButtonMMi.setToggleGroup(radioGroupLongitud);
 
-        Scene scene = new Scene(pane, 600, 180);
+        //vBoxUnidades.getChildren().addAll(radioButtonCmFt, radioButtonCmIn, radioButtonMMi);
+
+        //La diivsionn de los tres contenedors
+        splitPane.getItems().addAll(vBoxGrupo, vBoxMenuUnidades, vBoxUnidades);
+        splitPane.setDividerPositions(0.5f, 0.8f, 0.4f);
+
+        // Selleccion de tooglebutton
+
+        toggleButtonLongitud.setOnAction(actionEvent -> {
+            vBoxUnidades.getChildren().addAll(radioButtonCmFt, radioButtonCmIn, radioButtonMMi);
+        });
+
+        //Pane pane = new Pane(vBoxGrupo);
+
+        Scene scene = new Scene(splitPane, 800, 180);
         stage.setTitle("Convertidor de unidades");
         stage.setScene(scene);
         stage.show();
