@@ -12,9 +12,11 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -24,21 +26,20 @@ public class ConvertidorUi extends Application {
 
     StringProperty etiqueta1 = new SimpleStringProperty("Unidad1");
     StringProperty etiqueta2 = new SimpleStringProperty("Unidad2");
-    DoubleProperty cm = new SimpleDoubleProperty(0.0);
-    DoubleProperty in = new SimpleDoubleProperty(0.0);
-    DoubleProperty m = new SimpleDoubleProperty(0.0);
-    DoubleProperty mi = new SimpleDoubleProperty(0.0);
-    DoubleProperty ft = new SimpleDoubleProperty(0.0);
-    DoubleProperty kg = new SimpleDoubleProperty(0.0);
-    DoubleProperty lb = new SimpleDoubleProperty(0.0);
+    DoubleProperty unidad1 = new SimpleDoubleProperty(0.0);
+    DoubleProperty unidad2 = new SimpleDoubleProperty(0.0);
     DoubleProperty medicionSlider = new SimpleDoubleProperty(0.0);
+
+    //Caracteristicas de font VBox
+    String fontFamily = "Arial";
+    Double fontSize = 16.0;
+    FontWeight fontWeight = FontWeight.BOLD;
+    FontPosture fontPosture = FontPosture.REGULAR;
+    Font fontDimensiones = Font.font(fontFamily, fontWeight, fontPosture, fontSize);
+
 
     @Override
     public void start(Stage stage) throws IOException {
-
-//        //cambio manual de las unidades
-//        etiqueta1.set("centimetros(cm)");
-//        etiqueta2.set("pulgadas(in)");
 
         SplitPane splitPane = new SplitPane();
 
@@ -51,6 +52,7 @@ public class ConvertidorUi extends Application {
 
         //etiquetas para unidades en split1
         Label labelMenuDimensiones = new Label("Dimensiones");
+        labelMenuDimensiones.setFont(fontDimensiones);
         Label labelUnidades = new Label("Unidades");
         //etiquetas para selector de unidades en split2
 
@@ -67,6 +69,7 @@ public class ConvertidorUi extends Application {
         ToggleButton toggleButtonVolumen = new ToggleButton("Volumen");
 
         ToggleGroup toggleGroupUnidades = new ToggleGroup();
+
 
         //radiobutton para seleccionar conversion
             //longitud
@@ -87,15 +90,7 @@ public class ConvertidorUi extends Application {
         //calculos
 
         medicionSlider.bind(slider.valueProperty());
-//        cm.bind(medicionSlider);
-//        in.bind(medicionSlider.divide(2.54));
 //
-//        //Link mediciones y contenedor
-//        textFieldUnidadUno.textProperty().bind(cm.asString());
-//        textFieldUnidadDos.textProperty().bind(in.asString());
-
-
-
 
         //Hbox 1
         HBox hBoxBloque1 = new HBox(2, textFieldUnidadUno, labelUnidad1);
@@ -108,9 +103,13 @@ public class ConvertidorUi extends Application {
         //Vbox 1
         VBox vBoxGrupo = new VBox(hBoxBloque1, slider, hBoxBloque2);
         VBox.setMargin(slider, new Insets(0, 10, 0, 10));
+        vBoxGrupo.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
+                CornerRadii.EMPTY, Insets.EMPTY)));
 
         //Vbox2 MenuUnidades
         VBox vBoxMenuUnidades = new VBox(labelMenuDimensiones);
+        vBoxMenuUnidades.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
+                CornerRadii.EMPTY, Insets.EMPTY)));
         //ToggleGroup
         toggleButtonLongitud.setToggleGroup(toggleGroupUnidades);
         toggleButtonMasa.setToggleGroup(toggleGroupUnidades);
@@ -118,13 +117,21 @@ public class ConvertidorUi extends Application {
         //Agrupar los togglebuttons en vbox
         vBoxMenuUnidades.getChildren().addAll(toggleButtonLongitud, toggleButtonMasa,
                 toggleButtonVolumen);
+        vBoxMenuUnidades.setSpacing(8.0);
 
         //Vbox3 Unidades
         VBox vBoxUnidades = new VBox(labelUnidades);
-            //toggle radiobutton
+            //toggle radiobutton longitud
                 radioButtonmFt.setToggleGroup(radioGroupLongitud);
                 radioButtonCmIn.setToggleGroup(radioGroupLongitud);
                 radioButtonMMi.setToggleGroup(radioGroupLongitud);
+            // toggle radiobutton masa
+                radioButtonLbKg.setToggleGroup(radioGroupMasa);
+            // toggle radiogroup volumen
+                radioButtoncm3L.setToggleGroup(radioGroupVolumen);
+                radioButtonLGa.setToggleGroup(radioGroupVolumen);
+                vBoxUnidades.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,
+                        CornerRadii.EMPTY, Insets.EMPTY)));
 
 
         //La diivsionn de los tres contenedors
@@ -156,12 +163,13 @@ public class ConvertidorUi extends Application {
             labelUnidad1.textProperty().bind(etiqueta1);
             labelUnidad2.textProperty().bind(etiqueta2);
 
-            cm.bind(medicionSlider);
-            in.bind(medicionSlider.divide(2.54));
+            slider.setValue(0.0);
+            unidad1.bind(medicionSlider);
+            unidad2.bind(medicionSlider.divide(2.54));
 
             //Link mediciones y contenedor
-            textFieldUnidadUno.textProperty().bind(cm.asString());
-            textFieldUnidadDos.textProperty().bind(in.asString());
+            textFieldUnidadUno.textProperty().bind(unidad1.asString());
+            textFieldUnidadDos.textProperty().bind(unidad2.asString());
 
         });
 
@@ -171,11 +179,12 @@ public class ConvertidorUi extends Application {
             labelUnidad1.textProperty().bind(etiqueta1);
             labelUnidad2.textProperty().bind(etiqueta2);
 
-            m.bind(medicionSlider);
-            mi.bind(medicionSlider.multiply(0.00062137));
+            slider.setValue(0.0);
+            unidad1.bind(medicionSlider);
+            unidad2.bind(medicionSlider.multiply(0.00062137));
 
-            textFieldUnidadUno.textProperty().bind(m.asString());
-            textFieldUnidadDos.textProperty().bind(mi.asString());
+            textFieldUnidadUno.textProperty().bind(unidad1.asString());
+            textFieldUnidadDos.textProperty().bind(unidad2.asString());
         });
 
         radioButtonmFt.setOnAction(actionEvent -> {
@@ -184,11 +193,12 @@ public class ConvertidorUi extends Application {
             labelUnidad1.textProperty().bind(etiqueta1);
             labelUnidad2.textProperty().bind(etiqueta2);
 
-            m.bind(medicionSlider);
-            ft.bind(medicionSlider.multiply(3.28));
+            slider.setValue(0.0);
+            unidad1.bind(medicionSlider);
+            unidad2.bind(medicionSlider.multiply(3.28));
 
-            textFieldUnidadUno.textProperty().bind(m.asString());
-            textFieldUnidadDos.textProperty().bind(ft.asString());
+            textFieldUnidadUno.textProperty().bind(unidad1.asString());
+            textFieldUnidadDos.textProperty().bind(unidad2.asString());
 
         });
 
@@ -198,18 +208,45 @@ public class ConvertidorUi extends Application {
            labelUnidad1.textProperty().bind(etiqueta1);
            labelUnidad2.textProperty().bind(etiqueta2);
 
-           kg.bind(medicionSlider);
-           lb.bind(medicionSlider.multiply(2.2046));
+            slider.setValue(0.0);
+           unidad1.bind(medicionSlider);
+           unidad2.bind(medicionSlider.multiply(2.2046));
 
-           textFieldUnidadUno.textProperty().bind(kg.asString());
-           textFieldUnidadDos.textProperty().bind(lb.asString());
+           textFieldUnidadUno.textProperty().bind(unidad1.asString());
+           textFieldUnidadDos.textProperty().bind(unidad2.asString());
 
+        });
+
+        radioButtoncm3L.setOnAction(actionEvent -> {
+            etiqueta1.set("Litros (l)");
+            etiqueta2.set("centimetros cubicos (cm3)");
+            labelUnidad1.textProperty().bind(etiqueta1);
+            labelUnidad2.textProperty().bind(etiqueta2);
+
+            slider.setValue(0.0);
+            unidad1.bind(medicionSlider);
+            unidad2.bind(medicionSlider.multiply(1000.0));
+            textFieldUnidadUno.textProperty().bind(unidad1.asString());
+            textFieldUnidadDos.textProperty().bind(unidad2.asString());
+        });
+
+        radioButtonLGa.setOnAction(actionEvent -> {
+            etiqueta1.set("Litros (l)");
+            etiqueta2.set("Galones (gal)");
+            labelUnidad1.textProperty().bind(etiqueta1);
+            labelUnidad2.textProperty().bind(etiqueta2);
+
+            slider.setValue(0.0);
+            unidad1.bind(medicionSlider);
+            unidad2.bind(medicionSlider.multiply(0.264172));
+            textFieldUnidadUno.textProperty().bind(unidad1.asString());
+            textFieldUnidadDos.textProperty().bind(unidad2.asString());
         });
 
         //Pane pane = new Pane(vBoxGrupo);
 
         Scene scene = new Scene(splitPane, 800, 180);
-        stage.setTitle("Convertidor de unidades");
+        stage.setTitle("Convertidor de Unidades");
         stage.setScene(scene);
         stage.show();
     }
